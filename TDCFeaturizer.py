@@ -5,6 +5,7 @@ import datetime
 import time
 from residual_block import residual_block
 import random
+import os
 
 class TDCFeaturizer(BaseFeaturizer):
     """Temporal Distance Classification featurizer
@@ -24,7 +25,13 @@ class TDCFeaturizer(BaseFeaturizer):
 
     def __init__(self, initial_width, initial_height, desired_width, desired_height, feature_vector_size=1024, learning_rate=0.0001, experiment_name='default'):
         print("Starting featurizer initialization")
-        self.sess = tf.Session()
+        # Set GPU options
+        os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
+        
+        self.sess = tf.Session(config=config)
         self.graph = TDCFeaturizer._generate_featurizer(initial_width, initial_height, desired_width, desired_height, feature_vector_size, learning_rate)
         self.saver = tf.train.Saver()
         timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')

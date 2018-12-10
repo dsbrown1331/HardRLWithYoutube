@@ -9,11 +9,11 @@ This implementation was developed by Max Sobol Mark.
 ## Running the project
 First execute the script to download the videos to train the featurizer (requires youtube-dl)
 
-`python -m download_videos.py --filename montezuma.txt`
+`python -m download_videos --filename montezuma.txt`
 
 Then run the train_featurizer script
 
-`python -m train_featurizer.py --featurizer_type tdc --videos_path montezuma.txt --initial_width 92 --initial_height 92 --desired_width 84 --desired_height 84 --num_epochs 200000 --batch_size 32 --featurizer_save_path montezuma`
+`python -m train_featurizer --featurizer_type tdc --videos_path montezuma.txt --initial_width 92 --initial_height 92 --desired_width 84 --desired_height 84 --num_epochs 200000 --batch_size 32 --featurizer_save_path montezuma`
 
 Once the script is done training the featurizer, it will be saved in the `featurizers/montezuma/` folder.
 

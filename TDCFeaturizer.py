@@ -215,11 +215,38 @@ class TDCFeaturizer(BaseFeaturizer):
                 possible_frames_start = 21
                 possible_frames_end = 200
 
-            first_frame_index = random.randint(0, videos[video_index].shape[0] - possible_frames_end - 1)
-            second_frame_index = random.randint(possible_frames_start, possible_frames_end)
+            
+            try:
+                clipped_first_frame_range_max = np.clip(videos[video_index].shape[0] - possible_frames_end - 1, 0, videos[video_index].shape[0] - 1)
+                
+                first_frame_index = random.randint(0, clipped_first_frame_range_max)            
+                second_frame_index = random.randint(possible_frames_start, possible_frames_end)
+                
+                second_frame_index = np.clip(first_frame_index + second_frame_index, 0, videos[video_index].shape[0] - 1)
+                
+                temporal_distance = second_frame_index - first_frame_index
+                
+                label_dict = {0: [0, 0], 1: [1, 1], 2: [2, 2], 3: [3, 4], 4: [4, 20], 5: [21, 200]}
+                for k, v in label_dict.items():
+                    if temporal_distance >= v[0] and temporal_distance <= v[1]:
+                        interval = k
+                # if temporal_distance == 0:
+                #     interval = 0
+                # if temporal_distance == 1:
+                #     interval = 1
+                # if temporal_distance == 2:
+                #     interval = 2
+                # if temporal_distance >=3 and temporal_distance <=4:
+                #     interval = 3
+                # if temporal_distance >=5 and temporal_distance <=20:
+                #     interval = 4
+                # if temporal_distance >=21:
+                #     interval = 5
 
-            frames[i, 0] = videos[video_index][first_frame_index] / 255 # To normalize data
-            frames[i, 1] = videos[video_index][first_frame_index + second_frame_index] / 255
-            labels[i, interval] = 1.
+                frames[i, 0] = videos[video_index][first_frame_index] / 255 # To normalize data
+                frames[i, 1] = videos[video_index][second_frame_index] / 255
+                labels[i, interval] = 1.
+            except Exception as e:
+                print(e.message)
 
         return frames, labels

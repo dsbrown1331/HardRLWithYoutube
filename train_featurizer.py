@@ -5,6 +5,7 @@ import os
 from VAEFeaturizer import VAEFeaturizer
 from TDCFeaturizer import TDCFeaturizer
 from ForwardModelFeaturizer import ForwardModelFeaturizer
+# from matplotlib import pyplot as plt
 
 def train_featurizer(featurizer_type, videos_path, framerate, initial_width, initial_height,
                      desired_width, desired_height, epochs, batch_size, learning_rate,
@@ -56,6 +57,9 @@ def train_featurizer(featurizer_type, videos_path, framerate, initial_width, ini
     featurizer.train(dataset, epochs, batch_size)
 
     if featurizer_save_path:
+        full_save_path = os.path.join(os.getcwd(), 'featurizers', featurizer_save_path)
+        if not os.path.exists(full_save_path):
+            os.makedirs(full_save_path)
         featurizer.save(featurizer_save_path)
 
     return featurizer
@@ -92,6 +96,12 @@ def generate_dataset(videos_path, framerate, width, height):
                     last_frame_index = video.get(cv2.CAP_PROP_FRAME_COUNT)
                     if frame_index >= last_frame_index:
                         # Video is over
+                        # plt.imshow(dataset[video_index][-10][:,:,0])
+                        # plt.show()
+                        # plt.imshow(dataset[video_index][-5][:,:,0])
+                        # plt.show()
+                        # plt.imshow(dataset[video_index][-1][:,:,0])
+                        # plt.show()
                         break
 
                     

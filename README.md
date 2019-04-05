@@ -8,6 +8,7 @@ This implementation was developed by Max Sobol Mark.
 
 ## Running the project
 First execute the script to download the videos to train the featurizer (requires youtube-dl)
+
 `pip install --upgrade youtube_dl`
 
 `python -m download_videos --filename montezuma.txt`
